@@ -1,0 +1,3 @@
+site/csv/*.csv
+site/graphs/*.png
+witl.db

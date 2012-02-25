@@ -1,0 +1,231 @@
+<!doctype html>
+
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!-- the "no-js" class is for Modernizr. -->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>How Do People Use Bookmarks?</title>
+    <meta name="description" content="How Do People Use Bookmarks?">
+
+    <link rel="stylesheet" href="_/css/style.css">
+    <link rel="stylesheet" href="default.css" type="text/css" />
+    <script src="_/js/modernizr-1.7.min.js"></script>
+
+</head>
+<body id="index" class="home">
+    <section id="body">
+        <h1>How Do People Use Bookmarks?</h1>
+
+        <section id="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li>
+                    <a href="#results">Results</a>
+                    <ol>
+                        <li><a href="#q1">Q1: How Users Differently Use Bookmarks and Folders</a></li>
+                        <li><a href="#q2">Q2: What Difference Exists Between Long Time Users and Newcomers</a></li>
+                        <li><a href="#about-users-in-data">About Users in Data</a></li>
+                    </ol>
+                </li>
+                <li><a href="#source">Source</a></li>
+            </ol>
+        </section>
+
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+                Our team consists of two Master's students at the School of Information, UC Berkeley - <a href="http://www.ischool.berkeley.edu/people/students/chulkilee">Chulki Lee</a> and <a href="http://www.ischool.berkeley.edu/people/students/travisyoo">Travis Yoo</a>. As part of the Mozilla Open Data Visualization Competition 2010, <a href="http://design-challenge.mozillalabs.com/open-data/OpenDataCompetition.php">How Do People Use Firefox?</a>, we would like to visualize general usage patterns as well as interesting user behavior, using the given dataset.
+            </p>
+            <p>
+                After exploring the dataset, <a href="https://testpilot.mozillalabs.com/testcases/a-week-life-2/aggregated-data.html">A Week in the Life of a Browser - Version 2: Aggregated Data Samples</a>, we chose to investigate how Firefox users organize their browsing history with bookmarks and if users with varying Firefox experiences show any difference in using Firefox.
+            </p>
+            <p>
+                The test pilot study recorded the number of bookmarks, bookmark folders, and the max depth of bookmark folders that test users maintain as well as timestamps every time they click their bookmarks to use. Also, there is a survey answered by the test users, which indicates how long they have used Firefox.
+            </p>
+            <p>
+                We used <a href="http://www.r-project.org/">R</a> and <a href="http://had.co.nz/ggplot2/">ggplot2</a>, a graphic visualization package, to visualize our exploration. The source code can be found at the bottom of this page. If you have any questions about the code, please send us an email.
+            </p>
+        </section>
+
+        <section id="results">
+            <h2>Results</h2>
+            <p></p>
+
+            <section id="q1">
+                <h3>Q1: How Users Differently Use Bookmarks and Folders</h3>
+
+                <p>
+                    We wanted to see if there was a pattern that users storing more bookmarks are the ones who actively use their bookmarks.
+                    To tackle this problem, we created a variable called "bookmark use ratio", which simply calculates the value of total number of bookmark choosing activities divided by the average number of bookmarks during the test period.
+                </p>
+                <p style="font-family:Courier;">
+                    <strong>Bookmark Use Ratio</strong> = (Total # of Bookmark Choosing Activities During the Test Period) / (Average # of Bookmarks that the User has during the Test Period)
+                </p>
+                <p>
+                    We used this variable because we could think that this could show the ratio between the organizing effort of bookmarks and their actual usage of bookmarks. 
+                    Using this variable, we developed the following graphs grouped by users' number of bookmarks, folders, and the max depth of bookmark folders.
+                </p>
+
+                <h4>Histogram of Bookmark Use Ratio</h4>
+
+                <figure>
+                    <a href="graphs/bookmark_use_ratio.png"><img src="graphs/bookmark_use_ratio.small.png" alt="" /></a>
+                    <figcaption>
+                        This histogram shows the number of users grouped by the variable <strong>Bookmark Use Ratio</strong>. Note that x-axis is in log 10 scale.
+                    </figcaption>
+                </figure>
+
+                <figure>
+                    <a href="graphs/bookmarks-vs-bookmark_use_ratio(log)-boxplot.png"><img src="graphs/bookmarks-vs-bookmark_use_ratio(log)-boxplot.small.png" alt="" /></a>
+                    <figcaption>
+                        We drew a boxplot using a log 10 scale to display both # of bookmarks of users and the bookmark use ratio. Interestingly, people with more bookmarks are showing lower bookmark user ratio in general.
+                    </figcaption>
+                </figure>
+
+                <figure>
+                    <a href="graphs/folders-vs-bookmark_use_ratio(log)-boxplot.png"><img src="graphs/folders-vs-bookmark_use_ratio(log)-boxplot.small.png" alt="" /></a>
+                    <figcaption>
+                        Again, we drew a boxplot using a log 10 scale to display both # of folders of users and the bookmark use ratio. Same here, people with more bookmark folders are showing lower bookmark user ratio in general.
+                    </figcaption>
+                </figure>
+
+                <figure>
+                    <a href="graphs/folder_max_depth-vs-bookmark_use_ratio(log)-boxplot.png"><img src="graphs/folder_max_depth-vs-bookmark_use_ratio(log)-boxplot.small.png" alt="" /></a>
+                    <figcaption>
+                        This is a boxplot between the max depth of bookmark folders of users and the log10 scale of bookmark use ratio. As you can see, people with deep structure of bookmark folders are showing lower bookmark user ratio in general.
+                    </figcaption>
+                </figure>
+
+                <h4>Summary</h4>
+                <p>
+                    # of bookmark choosing activities is an interesting data entity. Instead of using it as itself, we decided to create a ratio to consider # of bookmarks that users maintain. 
+                    Interestingly, all three boxplots show that people who organize their bookmarks vigorously, with folders, with complicated folder structures are showing less bookmark use ratio in general. From this fact, we could argue that they are not actively using their bookmarks, considering their efforts of organizing bookmarks.
+                    On the other hand, people with small # of bookmarks, folders, and less depth of folders tend to show high bookmark ratio; although it would be because of small # of bookmarks, we could guess that less complicated structure, essential list of bookmarks derive more use of bookmarks.
+                </p>
+            </section>
+
+            <section id="q2">
+                <h3>Q2: What Difference Exists Between Long Time Users and Newcomers</h3>
+
+                <p></p>
+
+                <h4>Bookmark use</h4>
+
+                <figure>
+                    <a href="graphs/fx_use-vs-bookmarks(log).png"><img src="graphs/fx_use-vs-bookmarks(log).small.png" alt="" /></a>
+                    <a href="graphs/long_fx_use-vs-bookmarks(log).png"><img src="graphs/long_fx_use-vs-bookmarks(log).small.png" alt="" /></a>
+                    <figcaption>
+                        This boxplot shows that the more users have been used Firefox, the more bookmarks they have. It seems somewhat obvious because more experienced users have visited more websites and a more chance to save bookmarks.
+                    </figcaption>
+                </figure>
+                
+                <figure>
+                    <a href="graphs/fx_use-vs-folders(log).png"><img src="graphs/fx_use-vs-folders(log).small.png" alt="" /></a>
+                    <a href="graphs/long_fx_use-vs-folders(log).png"><img src="graphs/long_fx_use-vs-folders(log).small.png" alt="" /></a>
+                    <figcaption>
+                        This boxplot shows the trend of number of folders categorized by users' Firefox experience. It is similar to the trend of the number of bookmarks.
+                    </figcaption>
+                </figure>
+
+                <figure>
+                    <a href="graphs/fx_use-vs-bookmark_choose(log).png"><img src="graphs/fx_use-vs-bookmark_choose(log).small.png" alt="" /></a>
+                    <a href="graphs/long_fx_use-vs-bookmark_choose(log).png"><img src="graphs/long_fx_use-vs-bookmark_choose(log).small.png" alt="" /></a>
+                    <figcaption>
+                        Interestingly, the number of using bookmarks are not increasing along the Firefox experience. It could indicate the "cognitive burden" of remembering and finding a bookmark in lots of bookmarks. Kind of a 'natural' limit of bookmark use? 
+                    </figcaption>
+                </figure>
+                
+                <figure>
+                    <a href="graphs/fx_use-vs-bookmark_use_ratio(log).png"><img src="graphs/fx_use-vs-bookmark_use_ratio(log).small.png" alt="" /></a>
+                    <a href="graphs/long_fx_use-vs-bookmark_use_ratio(log).png"><img src="graphs/long_fx_use-vs-bookmark_use_ratio(log).small.png" alt="" /></a>
+                    <figcaption>
+                        More experience, less bookmark use ratio - It may be because more experienced users have more bookmarks but their bookmark use is almost same. 
+                    </figcaption>
+                </figure>
+
+                <h4>Browsing</h4>
+
+                <figure>
+                    <a href="graphs/fx_use-vs-num_tabs(log).png"><img src="graphs/fx_use-vs-num_tabs(log).small.png" alt="" /></a>
+                    <a href="graphs/long_fx_use-vs-num_tabs(log).png"><img src="graphs/long_fx_use-vs-num_tabs(log).small.png" alt="" /></a>
+                    <figcaption>These graphs show that the more Firefox experience a user have, the more tabs he or she opens in average, but the difference is not so big. It might indicate that tab browsing is used by any kinds of people, regardless of their experience of using Firefox.</figcaption>
+                </figure>
+
+                <figure>
+                    <a href="graphs/fx_use-vs-private_on_records(log).png"><img src="graphs/fx_use-vs-private_on_records(log).small.png" alt="" /></a>
+                    <a href="graphs/long_fx_use-vs-private_on_records(log).png"><img src="graphs/long_fx_use-vs-private_on_records(log).small.png" alt="" /></a>
+                    <figcaption>Use of private mode does not differ by experience with Firefox.</figcaption>
+                </figure>
+            </section>
+
+            <section id="about-users-in-data">
+                <h3>About Users in Data</h3>
+                <p>
+                    Note that many people participated in the program without answering survey questions - 27268 users participated but only 434 users answered questions. Some users might have made multiple submissions, but those cases are not considered.
+                </p>
+                <figure>
+                    <a href="graphs/age.png"><img src="graphs/age.small.png" alt="Age histogram: 81 of <18, 193 of 18-25, 92 of 26-35, 45 of 36-45, 8 of 46-55, 12 of >55 and 2 not answered" /></a>
+                    <a href="graphs/gender.png"><img src="graphs/gender.small.png" alt="Gender histogram: 422 male, 5 female and 6 not answered" /></a>
+                    <figcaption>Age and gender</figcaption>
+                </figure>
+                <figure>
+                    <a href="graphs/primary_browser.png"><img src="graphs/primary_browser.small.png" alt="" /></a>
+                    <a href="graphs/other_browser_use.png"><img src="graphs/other_browser_use.small.png" alt="" /></a>
+                    <figcaption>
+                        Left: primary browser - If you use multiple browsers, what do you consider to be your primary browser?<br />
+                        Right: other browser use - Are you using other browsers besides Firefox?
+                    </figcaption>
+                </figure>
+                <figure>
+                    <a href="graphs/time_on_web.png"><img src="graphs/time_on_web.small.png" alt="" /></a>
+                    <figcaption>
+                        time on the web - How much time do you spend on the Web every day?
+                    </figcaption>
+                </figure>
+            </section>
+            
+            <h4>Summary</h4>
+            <p>
+                Some results seem to be obvious - more experienced users have more bookmarks and folders. However, similar use of tabs and private modes between users having more than 5 years of Firefox and others could enable the following explanations: 1) cognitive burden or information overload could make the natural limit of some features, like using bookmarks (based on bookmark choosing activities) 2) Firefox could improve its user interface for experienced users. 3) Firefox's interface is easy to use for beginners as well. :)
+            </p>
+        </section>
+
+        <section id="source">
+            <h2>Source</h2>
+            <ul>
+                <li><a href="r/sqlite-to-csv.R">r/sqlite-to-csv.R</a>: R script to generate CSV files from sqlite db. You don't need to run this - just use the following csv files</li>
+                <li><a href="r/load-csv.R">r/load-csv.R</a>: R script to load and recode data. This is used by generate-graphs.R.</li>
+                <li><a href="r/generate-graphs.R">r/generate-graphs.R</a>: R script to draw the graphs and save files. You have to create {root}/graphs directory before running it.</li>
+                <li><a href="csv/d.csv">csv/d.csv</a>: data file which contains stats by users who answer the survey.</li>
+                <li><a href="csv/dh.csv">csv/dh.csv</a>: same as "d.csv", but with additional hour information for user activities.</li>
+                <li><a href="csv/dw.csv">csv/dw.csv</a>: same as "d.csv", but with additional weekdays information for user activities.</li>
+            </ul>
+            <p>
+                Download files and save them as followings:
+            </p>
+            <ul>
+                <li>/csv: all csv files downloaded</li>
+                <li>/r: all r scripts downloaded</li>
+                <li>/graphs: empty directory - all graphs will be saved here</li>
+            </ul>
+            <p>
+                To regenerate CSV files from the sqlite file:
+                <pre><code>R -f r/sqlite-to-csv.R</code></pre>
+            </p>
+            <p>
+                To generate graphs from CSV files:
+                <pre><code>R -f r/generate-graphs.R</code></pre>
+            </p>
+        </section>
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write("<script src='_/js/jquery-1.5.1.min.js'>\x3C/script>")</script>
+    <script src="_/js/functions.js"></script>
+</body>
+</html>
